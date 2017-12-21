@@ -1,0 +1,350 @@
+﻿@section styles{
+    <style type="text/css">
+        .btn-img-delete:hover { display: block; }
+    </style>
+}
+
+
+<div id="cc" class="easyui-layout" data-options="fit:true">
+
+    <div data-options="region:'center',title:'服务商',split:true,iconCls:'glyphicon glyphicon-th-list'">
+        <div id="grdTools_date">
+            <div>
+                @*<div class="box">
+                        <div class="row m_top">
+                            <div class="span1 text_right">
+                                栏目编号：
+                            </div>
+                            <div class="span2">
+                                <input id="ChannelId" name="ChannelId" class="input validatebox-text" type="text" style="width: 135px;" />
+                            </div>
+                            <div class="span1 text_right">
+                                栏目名称：
+                            </div>
+                            <div class="span2">
+                                <input id="ChannelName" name="ChannelName" class="input validatebox-text" type="text" style="width: 135px;" />
+                            </div>
+                            <div class="span1 text_right">
+                                <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-search', plain:true" onclick="bindMemberDataGrid();">查询</a>
+                            </div>
+                        </div>
+                    </div>*@
+
+
+                <div>
+                    @{
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-plus-sign',plain:true" onclick="add();">添加</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-edit',plain:true" onclick="update();">修改</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-trash',plain:true" onclick="deleteData();">删除</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-edit',plain:true" onclick="Operate('Open');">启用</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-edit',plain:true" onclick="Operate('Close');">禁用</a>
+                    }
+                </div>
+                <hr class="line" />
+            </div>
+        </div>
+        @*<table id="dg_Channel"></table>*@
+        <div data-options="region:'west',title:'栏目分类',split:true,iconCls:'glyphicon glyphicon-th-list'" style="width:200px;">
+            <ul id="TreeView" class="easyui-tree"></ul>
+        </div>
+
+    </div>
+
+    <div data-options="region:'east',iconCls:'glyphicon glyphicon-random',title:'相关信息',split:true" style="width: 550px;">
+        <div id="tt" class="easyui-tabs" data-options="fit:true">
+            <div title="详细信息" data-options="closable:false,iconCls:'glyphicon glyphicon-list-alt'">
+                <div class="box">
+                    <div class="info_class">
+                        <div class="icon"></div>
+                        <span>栏目信息</span>
+                    </div>
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            栏目名称：
+                        </div>
+                        <div class="span4 text_left">
+                            <span data-bind="text:ChannelName"></span>
+                        </div>
+                    </div>
+                    @*<div class="row m_top">
+                            <div class="span1 text_right">
+                                上级名称：
+                            </div>
+                            <div class="span4 text_left">
+                                <span id="FatherId" data-bind="text:FatherId"></span>
+                            </div>
+                        </div>*@
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            节点名称：
+                        </div>
+                        <div class="span4 text_left">
+                            <span data-bind="text:text"></span>
+                        </div>
+                    </div>
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            栏目状态：
+                        </div>
+                        <div class="span4 text_left">
+                            <span data-bind="text:StatusText"></span>
+                        </div>
+                    </div>
+
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            备注：
+                        </div>
+                        <div class="span4 text_left">
+                            <span data-bind="text:Remarks"></span>
+                        </div>
+                    </div>
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            创建时间：
+                        </div>
+                        <div class="span5 text_left">
+                            <span id="date" data-bind="text:CreateTimeText"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        var _Index = "@Url.Content("~/Channel/Index")";
+        var _addApi = "@Url.Content("~/Channel/Add/")";
+        var _deleteApi = "@Url.Content("~/Channel/Delete/?channelId=")";
+        var _updateApi = "@Url.Content("~/Channel/Update/?id=")";
+        var _url_Operate = "@Url.Content("~/Channel/Operate/")";
+        var _urlChannelId = "@Url.Content("~/Channel/FarthChannel/")";
+        var _Url_ChannelTree = "@Url.Content("~/SQL/Tree/")";
+
+        $(function () {
+            initForm();
+            initDataGrid();
+        });
+
+        //初始化界面
+        function initForm() {
+            initTreeView();
+
+        }
+
+        //1.定义model
+        function viewModel() {
+            var self = this;
+            self.Data = ko.observableArray();
+        }
+
+        // 初始化树形
+        function initTreeView() {
+            //动态加载数据
+            $("#TreeView").tree({
+                url: _Url_ChannelTree,
+                animate: true,
+                lines: true,
+                cascadeCheck: true,
+                onlyLeafCheck: false,
+                onClick: function (node) {
+                    bindReferencesDataGrid(node.id);
+                    ko.applyBindings(node);
+                },
+                onSelect: function (node) {
+                    $(this).tree('expand', node.target);
+                },
+                onBeforeExpand: function (node) {
+                    $('#TreeView').tree('options').url = _Url_ChannelTree + "?FatherId=" + node.id;
+                }
+            });
+        }
+
+        function reloadTree() {
+            $("#TreeView").tree({
+                url: _Url_ChannelTree,
+                onLoadSuccess: function (node, data) {
+                    $('#TreeView').tree('expandAll');
+                }
+            })
+        }
+        //初始化数据表
+        function initDataGrid() {
+            //列定义
+            var columns = [[
+                { field: 'selected', checkbox: true },
+                { field: 'CHANNEL_ID', title: '栏目编号', sortable: true },
+                { field: 'CHANNEL_NAME', title: '栏目名称', width: 150, sortable: true },
+                { field: 'FATHER_ID', title: '上级编号', sortable: true },
+                { field: 'STATUS', title: '栏目状态', sortable: true },
+                { field: 'REMARKS', title: '备注', sortable: true },
+                { field: 'CREATE_TIME', title: '创建时间', width: 150, sortable: true }
+            ]];
+
+            //表格定义
+            $("#dg_Channel").datagrid({
+                fit: true,
+                toolbar: '#grdTools_date',
+                pagination: true,
+                rownumbers: true,
+                striped: true,
+                fill: true,
+                selectOnCheck: false,
+                singleSelect: true,
+                idField: "CREATE_TIME",
+                pageSize: 50,
+                pageList: [50, 100, 200],
+                sortName: "CREATE_TIME",
+                sortOrder: "desc",
+                columns: columns,
+                queryParams: getQueryParams(),
+                url: _Index,
+                rowStyler: function (index, row) {
+
+                },
+                onClickRow: function (index, data) {
+                    bindReferencesDataGrid(data.ID);
+                    ko.applyBindings(data);
+                }
+            });
+        }
+
+        //得到查询参数
+        function getQueryParams(fatherId) {
+            var params =
+            {
+                ChannelId: $("#ChannelId").val(),
+                ChannelName: $("#ChannelName").val(),
+            };
+
+            return params;
+        }
+
+        //栏目详情
+        function bindReferencesDataGrid(ChannelId) {
+            var url = _Index + ChannelId;
+        }
+
+        //绑定数据表
+        function bindMemberDataGrid() {
+
+            if (!$("#dg_Channel").datagrid("options").url)
+                $("#dg_Channel").datagrid("options").url = _Index;
+            $('#dg_Channel').datagrid("load", getQueryParams());
+        }
+
+        //刷新数据表
+        function refreshDataGrd() {
+            $("#TreeView").tree("unselectAll");
+            $("#TreeView").tree("uncheckAll");
+            $("#TreeView").tree("clearChecked");
+            $("#TreeView").tree("clearSelections");
+            $('#TreeView').tree('reload');
+        }
+
+        //新增数据
+        function add() {
+            var node = $('#TreeView').tree('getSelected');
+            if (!node) {
+                PageHelper.Message.ShowError("错误", "请选择主栏目再添加！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-plus-sign",
+                url: _addApi+"?TreeNodeId="+node.id,
+                title: '新增',
+                width: 460,
+                height: 300,
+                callback: function (data) {
+                    //解决当无下节点时不刷新的bug
+                    if (!node.children || node.children.lenght <= 0) {
+                        $('#TreeView').tree('append', {
+                            parent: node.target,
+                            data: [{
+                                id: 000,
+                                text: '加载中.....'
+                            }]
+                        });
+                    }
+                    $('#TreeView').tree('reload', node.target);
+                }
+            });
+        }
+
+        //编辑数据
+        function update() {
+            var node = $('#TreeView').tree('getSelected');
+            if (!node) {
+                PageHelper.Message.ShowError("错误", "请选择需要修改栏目！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _updateApi + node.id,
+                title: '修改数据',
+                width: 460,
+                height: 300,
+                callback: function (data) {
+                    $('#TreeView').tree('update', {
+                        target: node.target,
+                        text: data.text,
+                        level: data.level,
+                        Status: data.Status
+                    });
+                    $('#TreeView').tree('reload', node.target);
+                }
+            });
+        }
+
+        //删除数据
+        function deleteData() {
+            var node = $('#TreeView').tree('getSelected');
+            if (!node) {
+                PageHelper.Message.ShowError("错误", "请选择需要删除的行！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _deleteApi + node.ChannelId,
+                title: '删除数据',
+                width: 300,
+                height: 150,
+                callback: function (data) {
+                    $('#TreeView').tree("remove", node.target);
+                }
+            });
+        }
+
+        //禁用和启用
+        function Operate(status) {
+            var row = $("#TreeView").tree('getSelected');
+            if (!row) {
+                PageHelper.Message.ShowError("错误", "请选择需要操作的行！");
+                return;
+            }
+            $.post(
+                _url_Operate,
+                {
+                    channelId: row.ChannelId,
+                    Status: status
+                },
+                function (data) {
+                    if (data.Success) {
+                        if (status == "Open") {
+                            PageHelper.Message.ShowInfo("系统栏目", "启用成功");
+                            reloadTree();
+                        }
+                        if (status == "Close") {
+                            PageHelper.Message.ShowInfo("系统栏目", "禁用成功");
+                            reloadTree();
+                        }
+                    }
+                }, "json")
+
+        }
+
+    </script>
+}

@@ -1,0 +1,62 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".js" #>
+/*******************************************************
+场合：绑定枚举
+参数：
+    id:控件ID或者类选择器，如：#StoreType/.StoreType
+    value:默认值
+    isAll:是否可用所有（如果为true则会多一项“请选择”）
+
+模板编写：深圳乾海盛世（Jie）
+更新人员：<#Write(System.Net.Dns.GetHostName());#>
+
+更新时间：<#Write(System.DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒"));#>
+
+注意：此文件是由T4模板生成，如需要更改，请更改模板！！！
+*******************************************************/
+var apiEnum = {};
+
+<#
+            string[] list = { 
+                            "RunStatus",
+							"Cycle",
+							"IsSend",
+							"SendType"
+                            };
+            foreach (var item in list)
+            {
+			#>
+/*
+说明：绑定 <#Write(item);#> 枚举到下拉框
+*/
+apiEnum.bind<#Write(item);#> = function (options) {
+    var settings = {
+        id: "#<#Write(item);#>",
+        url: "/Enum/<#Write(item);#>/"
+    };
+    settings = $.extend(settings, options);
+    bindComboBox(settings);
+}
+
+<#}#>
+
+//绑定下拉框
+function bindComboBox(options) {
+    var settings = {
+        isAll: false,
+        required: false,
+        editable: false,
+        panelHeight: 120,
+        valueField: 'Value',
+        textField: 'Text',
+    };
+    settings = $.extend(settings, options);
+    if (settings.isAll) {
+        settings.url = settings.url + "?all=1";
+    }
+    $(settings.id).combobox(settings);
+}

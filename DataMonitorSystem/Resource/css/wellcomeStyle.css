@@ -1,0 +1,48 @@
+﻿
+.wellcome_title {
+    width: 90%;
+    padding-top: 50px;
+    padding-bottom: 20px;
+    margin: auto;
+    border-bottom: 1px solid #0092dc;
+}
+
+    .wellcome_title > h2 {
+        text-shadow: 0px 0px 5px #dddddd;
+        font-size: 25px;
+        font-family: Cambria;
+    }
+
+        .wellcome_title > h2 > span {
+            color: #0092dc;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+.data_Block {
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 0 5px #CCCCCC;
+    width: 150px;
+    float: left;
+    margin: 20px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+    .data_Block:hover {
+        border: 1px solid #3399FF;
+        box-shadow: 0 0 5px #3399FF;
+    }
+
+    .data_Block .title {
+        font-size: 25px;
+        text-align: center;
+        color: #0092dc;
+    }
+
+    .data_Block .value {
+        font-size: 20px;
+        text-align: center;
+        color: #CC6600;
+        font-weight: bold;
+    }

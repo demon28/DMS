@@ -1,0 +1,159 @@
+﻿<div id="cc" class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'center',title:'服务',split:true,iconCls:'glyphicon glyphicon-th-list'">
+        <div id="grdTools_date">
+            <div>
+                <div class="box">
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            周期：
+                        </div>
+                        <div class="span2">
+                            <input id="Cycle" name="Cycle" class="input validatebox-text" type="text" style="width: 135px;" />
+                        </div>
+                        <div class="span1 text_right">
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-search', plain:true" onclick="bindMemberDataGrid();">查询</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="line" />
+                <div>
+                    @{
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-edit',plain:true" onclick="updateWinService();">修改</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-trash',plain:true" onclick="deleteWinService();">删除</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <table id="dg_Store"></table>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        var _Index = "@Url.Content("~/WinService/Index")";
+        var _updateWinService = "@Url.Content("~/WinService/Update/?Id=")";
+        var _deleteWinService = "@Url.Content("~/WinService/Delete/?Id=")";
+       
+
+        $(function () {
+            initForm();
+            initDataGrid();
+        });
+        //初始化界面
+        function initForm() {
+            apiEnum.bindCycle({isAll:true});
+        }
+
+        //初始化数据表
+        function initDataGrid() {
+            //列定义
+            var columns = [[
+                { field: 'selected', checkbox: true },
+                { field: 'ID', title: '序列号', sortable: true },
+                { field: 'TITLE', title: '标题', width: 150, sortable: true },
+                { field: 'CHANNEL_NAME', title: '系统名称', width: 100, hidden: false, sortable: true },
+                { field: 'STATE', title: '状态', width: 80, sortable: true },
+                { field: 'CYCLE', title: '周期', sortable: true },
+                { field: 'NEXT_RUN_TIME', title: '下次执行时间', sortable: true },
+                { field: 'STATUS', title: '执行状态', sortable: true },
+                { field: 'RUN_RESULT', title: '执行结果', sortable: true },
+                { field: 'WREAMRKS', title: '备注', width: 150, sortable: true },
+                { field: 'CREATE_TIME', title: '录入时间', width: 150, sortable: true }
+            ]];
+
+            //表格定义
+            $("#dg_Store").datagrid({
+                fit: true,
+                toolbar: '#grdTools_date',
+                pagination: true,
+                rownumbers: true,
+                striped: true,
+                fill: true,
+                selectOnCheck: false,
+                singleSelect: true,
+                idField: "CREATE_TIME",
+                pageSize: 50,
+                pageList: [ 50, 100, 200],
+                sortName: "CREATE_TIME",
+                sortOrder: "desc",
+                columns: columns,
+                queryParams: getQueryParams(),
+                url: _Index,
+                rowStyler: function (index, row) {
+
+                }
+            });
+        }
+
+        //得到查询参数
+        function getQueryParams() {
+            var params =
+            {
+                Cycle: $("#Cycle").combobox("getValue")
+            };
+
+            return params;
+        }
+
+        //绑定数据表
+        function bindMemberDataGrid() {
+
+            if (!$("#dg_Store").datagrid("options").url)
+                $("#dg_Store").datagrid("options").url = _Index;
+            $('#dg_Store').datagrid("load", getQueryParams());
+        }
+
+        //刷新数据表
+        function refreshDataGrd() {
+            $("#dg_Store").datagrid("unselectAll");
+            $("#dg_Store").datagrid("uncheckAll");
+            $("#dg_Store").datagrid("clearChecked");
+            $("#dg_Store").datagrid("clearSelections");
+            $('#dg_Store').datagrid('reload');
+        }
+
+        //编辑数据
+        function updateWinService() {
+            var row = $('#dg_Store').datagrid('getSelected');
+            if (!row) {
+                PageHelper.Message.ShowError("错误", "请选择需要修改的行！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _updateWinService + row.ID,
+                title: '修改数据',
+                width: 400,
+                height: 530,
+                callback: function (data) {
+                    refreshDataGrd();
+                    $('#dg_Store').datagrid("selectRecord", data);
+                }
+            });
+        }
+
+        //删除数据
+        function deleteWinService() {
+            var row = $('#dg_Store').datagrid('getSelected');
+            if (!row) {
+                PageHelper.Message.ShowError("错误", "请选择需要删除的行！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _deleteWinService + row.ID,
+                title: '删除数据',
+                width: 300,
+                height: 150,
+                callback: function (data) {
+                    refreshDataGrd();
+                    $('#dg_Store').datagrid("selectRecord", data);
+                }
+            });
+        }
+
+    </script>
+}
+
+

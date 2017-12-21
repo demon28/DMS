@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>7500服务商管理后台</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Resource/css/themes/gray/core.css?s" rel="stylesheet" />
+    <link href="~/Resource/css/themes/gray/easyui.css?1" rel="stylesheet" />
+    <link href="~/Resource/css/themes/icon.css" rel="stylesheet" />
+    <link href="~/Resource/css/layout.css" rel="stylesheet" />
+
+    <script src="~/Resource/scripts/jquery/knockout-2.1.0.js"></script>
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    @RenderBody()
+    <script src="~/Resource/scripts/jquery/jquery-1.7.1.min.js"></script>
+    <script src="~/Resource/scripts/jquery/jquery.validate.min.js"></script>
+    <script src="~/Resource/scripts/easyui/jquery.easyui.min.js"></script>
+    <script src="~/Resource/scripts/easyui/easyui-lang-zh_CN.js"></script>
+    <script src="~/Resource/scripts/ext/frameHelper.js"></script>
+    <script src="~/Resource/scripts/ext/pageHelper.js"></script>
+    <script src="~/Resource/scripts/ext/api/apiEnum.js?123456"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

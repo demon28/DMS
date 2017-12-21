@@ -1,0 +1,292 @@
+﻿
+<div style="width: 90%; padding-top: 50px; padding-bottom: 20px; margin: auto; border-bottom: 1px solid #0092dc;">
+    <h2 style="text-shadow: 0px 0px 5px #dddddd; font-size: 25px; font-family: Cambria">欢迎<span style="color: #0092dc; margin-left: 5px; margin-right: 5px;">@Winner.Framework.MVC.ApplicationContext.Current.User.UserName</span> 登陆SQL监控系统！</h2>
+</div>
+<div style="width: 90%; padding-top: 20px; padding-bottom: 20px; margin: auto; border-bottom: 1px solid #0092dc;">
+    <div class="box">
+        <div class="row m_top">
+            <div class="span1 text_right">
+                会员账户：
+            </div>
+            <div class="span3" style="color: #0092dc">
+                @Winner.Framework.MVC.ApplicationContext.Current.User.UserCode
+            </div>
+            <div class="span1 text_right">
+                主机名称：
+            </div>
+            <div class="span3" style="color: #0092dc">
+                @Winner.Framework.MVC.ApplicationContext.UserHostName
+            </div>
+        </div>
+        <div class="row m_top">
+            <div class="span1 text_right">
+                会员姓名：
+            </div>
+            <div class="span3" style="color: #0092dc">
+                @Winner.Framework.MVC.ApplicationContext.Current.User.UserName
+            </div>
+            <div class="span1 text_right">
+                主机地址：
+            </div>
+            <div class="span3" style="color: #0092dc">
+                @Winner.Framework.MVC.ApplicationContext.UserHostAddress
+            </div>
+        </div>
+        <div class="row m_top">
+            <div class="span1 text_right">
+                系统角色：
+            </div>
+            <div class="span3" style="color: #0092dc">
+                系统管理员
+            </div>
+            <div class="span1 text_right">
+                登陆时间：
+            </div>
+            <div class="span3" style="color: #0092dc">
+                @DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒")
+            </div>
+        </div>
+    </div>
+</div>
+<div style="width: 90%; padding-top: 20px; padding-bottom: 20px; margin: auto;">
+    <div class="data_Block" style="width: 400px;">
+        <div class="title">XXXX</div>
+        <hr class="line" />
+        <div class="row m_top">
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>个
+            </div>
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>元
+            </div>
+
+        </div>
+        <div class="row m_top">
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>元
+            </div>
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>元
+            </div>
+        </div>
+        <div class="row m_top">
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>元
+            </div>
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>元
+            </div>
+        </div>
+        <div class="row m_top">
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>元
+            </div>
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>元
+            </div>
+        </div>
+    </div>
+    <div class="data_Block" style="width: 400px;">
+        <div class="title">XXXX</div>
+        <hr class="line" />
+        <div class="row m_top">
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX</span>
+
+            </div>
+
+        </div>
+        <div class="row m_top">
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX </span>
+
+            </div>
+        </div>
+        <div class="row m_top">
+            <div class="span1 text_right">
+                XXXX：
+            </div>
+            <div class="span1 text_left">
+                <span>XXXX </span>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Resource/css/WellcomeStyle.css?20140806" rel="stylesheet" />
+@if (Common.Debuger.IsDebug)
+{
+    <div style="clear: left">
+        <div class="glyphicon glyphicon "></div>
+        <div class="glyphicon glyphicon-white "></div>
+        <div class="glyphicon glyphicon-music "></div>
+        <div class="glyphicon glyphicon-search "></div>
+        <div class="glyphicon glyphicon-envelope "></div>
+        <div class="glyphicon glyphicon-heart "></div>
+        <div class="glyphicon glyphicon-star "></div>
+        <div class="glyphicon glyphicon-star-empty "></div>
+        <div class="glyphicon glyphicon-user "></div>
+        <div class="glyphicon glyphicon-film "></div>
+        <div class="glyphicon glyphicon-th-large "></div>
+        <div class="glyphicon glyphicon-th "></div>
+        <div class="glyphicon glyphicon-th-list "></div>
+        <div class="glyphicon glyphicon-ok "></div>
+        <div class="glyphicon glyphicon-remove "></div>
+        <div class="glyphicon glyphicon-zoom-in "></div>
+        <div class="glyphicon glyphicon-zoom-out "></div>
+        <div class="glyphicon glyphicon-off "></div>
+        <div class="glyphicon glyphicon-signal "></div>
+        <div class="glyphicon glyphicon-cog "></div>
+        <div class="glyphicon glyphicon-trash "></div>
+        <div class="glyphicon glyphicon-home "></div>
+        <div class="glyphicon glyphicon-file "></div>
+        <div class="glyphicon glyphicon-time "></div>
+        <div class="glyphicon glyphicon-road "></div>
+        <div class="glyphicon glyphicon-download-alt "></div>
+        <div class="glyphicon glyphicon-download "></div>
+        <div class="glyphicon glyphicon-upload "></div>
+        <div class="glyphicon glyphicon-inbox "></div>
+        <div class="glyphicon glyphicon-play-circle "></div>
+        <div class="glyphicon glyphicon-repeat "></div>
+        <div class="glyphicon glyphicon-refresh "></div>
+        <div class="glyphicon glyphicon-list-alt "></div>
+        <div class="glyphicon glyphicon-lock "></div>
+        <div class="glyphicon glyphicon-flag "></div>
+        <div class="glyphicon glyphicon-headphones "></div>
+        <div class="glyphicon glyphicon-volume-off "></div>
+        <div class="glyphicon glyphicon-volume-down "></div>
+        <div class="glyphicon glyphicon-volume-up "></div>
+        <div class="glyphicon glyphicon-qrcode "></div>
+        <div class="glyphicon glyphicon-barcode "></div>
+        <div class="glyphicon glyphicon-tag "></div>
+        <div class="glyphicon glyphicon-tags "></div>
+        <div class="glyphicon glyphicon-book "></div>
+        <div class="glyphicon glyphicon-bookmark "></div>
+        <div class="glyphicon glyphicon-print "></div>
+        <div class="glyphicon glyphicon-camera "></div>
+        <div class="glyphicon glyphicon-font "></div>
+        <div class="glyphicon glyphicon-bold "></div>
+        <div class="glyphicon glyphicon-italic "></div>
+        <div class="glyphicon glyphicon-text-height "></div>
+        <div class="glyphicon glyphicon-text-width "></div>
+        <div class="glyphicon glyphicon-align-left "></div>
+        <div class="glyphicon glyphicon-align-center "></div>
+        <div class="glyphicon glyphicon-align-right "></div>
+        <div class="glyphicon glyphicon-align-justify "></div>
+        <div class="glyphicon glyphicon-list "></div>
+        <div class="glyphicon glyphicon-indent-left "></div>
+        <div class="glyphicon glyphicon-indent-right "></div>
+        <div class="glyphicon glyphicon-facetime-video "></div>
+        <div class="glyphicon glyphicon-picture "></div>
+        <div class="glyphicon glyphicon-pencil "></div>
+        <div class="glyphicon glyphicon-map-marker "></div>
+        <div class="glyphicon glyphicon-adjust "></div>
+        <div class="glyphicon glyphicon-tint "></div>
+        <div class="glyphicon glyphicon-edit "></div>
+        <div class="glyphicon glyphicon-share "></div>
+        <div class="glyphicon glyphicon-check "></div>
+        <div class="glyphicon glyphicon-move "></div>
+        <div class="glyphicon glyphicon-step-backward "></div>
+        <div class="glyphicon glyphicon-fast-backward "></div>
+        <div class="glyphicon glyphicon-backward "></div>
+        <div class="glyphicon glyphicon-play "></div>
+        <div class="glyphicon glyphicon-pause "></div>
+        <div class="glyphicon glyphicon-stop "></div>
+        <div class="glyphicon glyphicon-forward "></div>
+        <div class="glyphicon glyphicon-fast-forward "></div>
+        <div class="glyphicon glyphicon-step-forward "></div>
+        <div class="glyphicon glyphicon-eject "></div>
+        <div class="glyphicon glyphicon-chevron-left "></div>
+        <div class="glyphicon glyphicon-chevron-right "></div>
+        <div class="glyphicon glyphicon-plus-sign "></div>
+        <div class="glyphicon glyphicon-minus-sign "></div>
+        <div class="glyphicon glyphicon-remove-sign "></div>
+        <div class="glyphicon glyphicon-ok-sign "></div>
+        <div class="glyphicon glyphicon-question-sign "></div>
+        <div class="glyphicon glyphicon-info-sign "></div>
+        <div class="glyphicon glyphicon-screenshot "></div>
+        <div class="glyphicon glyphicon-remove-circle "></div>
+        <div class="glyphicon glyphicon-ok-circle "></div>
+        <div class="glyphicon glyphicon-ban-circle "></div>
+        <div class="glyphicon glyphicon-arrow-left "></div>
+        <div class="glyphicon glyphicon-arrow-right "></div>
+        <div class="glyphicon glyphicon-arrow-up "></div>
+        <div class="glyphicon glyphicon-arrow-down "></div>
+        <div class="glyphicon glyphicon-share-alt "></div>
+        <div class="glyphicon glyphicon-resize-full "></div>
+        <div class="glyphicon glyphicon-resize-small "></div>
+        <div class="glyphicon glyphicon-plus "></div>
+        <div class="glyphicon glyphicon-minus "></div>
+        <div class="glyphicon glyphicon-asterisk "></div>
+        <div class="glyphicon glyphicon-exclamation-sign "></div>
+        <div class="glyphicon glyphicon-gift "></div>
+        <div class="glyphicon glyphicon-leaf "></div>
+        <div class="glyphicon glyphicon-fire "></div>
+        <div class="glyphicon glyphicon-eye-open "></div>
+        <div class="glyphicon glyphicon-eye-close "></div>
+        <div class="glyphicon glyphicon-warning-sign "></div>
+        <div class="glyphicon glyphicon-plane "></div>
+        <div class="glyphicon glyphicon-calendar "></div>
+        <div class="glyphicon glyphicon-random "></div>
+        <div class="glyphicon glyphicon-comment "></div>
+        <div class="glyphicon glyphicon-magnet "></div>
+        <div class="glyphicon glyphicon-chevron-up "></div>
+        <div class="glyphicon glyphicon-chevron-down "></div>
+        <div class="glyphicon glyphicon-retweet "></div>
+        <div class="glyphicon glyphicon-shopping-cart "></div>
+        <div class="glyphicon glyphicon-folder-close "></div>
+        <div class="glyphicon glyphicon-folder-open "></div>
+        <div class="glyphicon glyphicon-resize-vertical "></div>
+        <div class="glyphicon glyphicon-resize-horizontal "></div>
+        <div class="glyphicon glyphicon-hdd "></div>
+        <div class="glyphicon glyphicon-bullhorn "></div>
+        <div class="glyphicon glyphicon-bell "></div>
+        <div class="glyphicon glyphicon-certificate "></div>
+        <div class="glyphicon glyphicon-thumbs-up "></div>
+        <div class="glyphicon glyphicon-thumbs-down "></div>
+        <div class="glyphicon glyphicon-hand-right "></div>
+        <div class="glyphicon glyphicon-hand-left "></div>
+        <div class="glyphicon glyphicon-hand-up "></div>
+        <div class="glyphicon glyphicon-hand-down "></div>
+        <div class="glyphicon glyphicon-circle-arrow-right "></div>
+        <div class="glyphicon glyphicon-circle-arrow-left "></div>
+        <div class="glyphicon glyphicon-circle-arrow-up "></div>
+        <div class="glyphicon glyphicon-circle-arrow-down "></div>
+        <div class="glyphicon glyphicon-globe "></div>
+        <div class="glyphicon glyphicon-wrench "></div>
+        <div class="glyphicon glyphicon-tasks "></div>
+        <div class="glyphicon glyphicon-filter "></div>
+        <div class="glyphicon glyphicon-briefcase "></div>
+        <div class="glyphicon glyphicon-fullscreen "></div>
+
+    </div>
+}

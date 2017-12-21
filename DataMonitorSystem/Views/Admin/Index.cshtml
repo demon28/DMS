@@ -1,0 +1,173 @@
+﻿
+<div id="cc" class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'center',title:'服务商',split:true,iconCls:'glyphicon glyphicon-th-list'">
+        <div id="grdTools_date">
+            <div>
+                <div class="box">
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            用户姓名：
+                        </div>
+                        <div class="span2">
+                            <input id="NodeName" name="NodeName" class="input validatebox-text" type="text" style="width: 135px;" />
+                        </div>
+                        <div class="span1 text_right">
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-search', plain:true" onclick="bindMemberDataGrid();">查询</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="line" />
+                <div>
+                    @{
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-edit',plain:true" onclick="update();">修改</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-trash',plain:true" onclick="deleteData();">删除</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <table id="dg_Store"></table>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        var _Index = "@Url.Content("~/Admin/Index")";
+        var _addApi = "@Url.Content("~/Admin/Add/")";
+        var _deleteApi = "@Url.Content("~/Admin/Delete/?Id=")";
+        var _updateApi = "@Url.Content("~/Admin/Update/?Id=")";
+
+        $(function () {
+            initForm();
+            initDataGrid();
+        });
+        //初始化界面
+        function initForm() {
+
+        }
+
+        //初始化数据表
+        function initDataGrid() {
+            //列定义
+            var columns = [[
+                { field: 'selected', checkbox: true },
+                { field: 'ID', title: '编号', sortable: true },
+                { field: 'INFO_ID', title: 'SQL语句的编号',hidden:true, sortable: true },
+                { field: 'TITLE', title: 'SQL语句标题', width: 100, sortable: true },
+                { field: 'NODE_ID', title: '用户编号',hidden:true, sortable: true },
+                { field: 'NODENAME', title: '用户姓名', width: 100, hidden: false, sortable: true },
+                { field: 'NODECODE', title: '用户账号', width: 100, sortable: true },
+                { field: 'REMARK', title: '备注',width: 150, sortable: true },
+                { field: 'CREATE_TIME', title: '录入时间', width: 150, sortable: true }
+            ]];
+
+            //表格定义
+            $("#dg_Store").datagrid({
+                fit: true,
+                toolbar: '#grdTools_date',
+                pagination: true,
+                rownumbers: true,
+                striped: true,
+                fill: true,
+                selectOnCheck: false,
+                singleSelect: true,
+                idField: "CREATE_TIME",
+                pageSize: 50,
+                pageList: [ 50, 100, 200],
+                sortName: "CREATE_TIME",
+                sortOrder: "desc",
+                columns: columns,
+                queryParams: getQueryParams(),
+                url: _Index,
+                rowStyler: function (index, row) {
+
+                },
+                onClickRow: function (index, data) {
+                    bindReferencesDataGrid(data.ID);
+                    ko.applyBindings(data);
+                }
+            });
+        }
+
+        //得到查询参数
+        function getQueryParams() {
+            var params =
+            {
+                NodeName: $("#NodeName").val(),
+            };
+
+            return params;
+        }
+
+        //绑定数据表
+        function bindMemberDataGrid() {
+
+            if (!$("#dg_Store").datagrid("options").url)
+                $("#dg_Store").datagrid("options").url = _Index;
+            $('#dg_Store').datagrid("load", getQueryParams());
+        }
+
+        //刷新数据表
+        function refreshDataGrd() {
+            $("#dg_Store").datagrid("unselectAll");
+            $("#dg_Store").datagrid("uncheckAll");
+            $("#dg_Store").datagrid("clearChecked");
+            $("#dg_Store").datagrid("clearSelections");
+            $('#dg_Store').datagrid('reload');
+        }
+        //新增数据
+        function add() {
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-plus-sign",
+                url: _addApi,
+                title: '新增',
+                width: 350,
+                height: 340,
+                callback: function (data) {
+                    refreshDataGrd();
+                }
+            });
+        }
+
+        //编辑数据
+        function update() {
+            var row = $('#dg_Store').datagrid('getSelected');
+            if (!row) {
+                PageHelper.Message.ShowError("错误", "请选择需要修改的行！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _updateApi + row.ID,
+                title: '修改数据',
+                width: 350,
+                height: 340,
+                callback: function (data) {
+                    refreshDataGrd();
+                    //$('#dg_Pos').datagrid("selectRecord", data);
+                }
+            });
+        }
+
+        //删除数据
+        function deleteData() {
+            var row = $('#dg_Store').datagrid('getSelected');
+            if (!row) {
+                PageHelper.Message.ShowError("错误", "请选择需要删除的行！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _deleteApi + row.ID,
+                title: '删除数据',
+                width: 300,
+                height: 150,
+                callback: function (data) {
+                    refreshDataGrd();
+                    //$('#dg_Pos').datagrid("selectRecord", data);
+                }
+            });
+        }
+
+    </script>
+}

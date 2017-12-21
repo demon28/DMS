@@ -1,0 +1,404 @@
+﻿/*重设浏览器默认样式*/
+
+/* 防止用户自定义背景颜色对网页的影响，添加让用户可以自定义字体 */
+html {
+    color: #000;
+    background: #fff;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+/* 内外边距通常让各个浏览器样式的表现位置不同 */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    margin: 0;
+    padding: 0;
+}
+
+/* 要注意表单元素并不继承父级 font 的问题 */
+body, button, input, select, textarea {
+    font: normal 12px 微软雅黑,Tahoma,Verdana,Arial,Helvetica,sans-serif;
+    color: #201F35;
+}
+
+input, select, textarea {
+    font-size: 100%;
+}
+
+/* 去掉各Table  cell 的边距并让其边重合 */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* IE bug fixed: th 不继承 text-align*/
+th {
+    text-align: inherit;
+}
+
+/* 去除默认边框 */
+img {
+    border: 0;
+}
+
+/* ie6 7 8(q) bug 显示为行内表现 */
+iframe {
+    display: block;
+}
+
+/* 去掉列表前的标识, li 会继承 */
+ol, ul {
+    list-style: none;
+}
+
+/* 对齐是排版最重要的因素, 别让什么都居中 */
+caption, th {
+    text-align: left;
+}
+
+/* 让链接在 hover 状态下显示下划线 */
+a:hover {
+    text-decoration: underline;
+}
+
+/* 默认不显示下划线，保持页面简洁 */
+a {
+    text-decoration: none;
+}
+
+
+/*基本元素的样式*/
+
+.box {
+    padding: 7px;
+}
+
+.box_mini {
+    padding: 3px;
+}
+
+.box_large {
+    padding: 14px;
+}
+
+/*color*/
+.c_green {
+    color: #337129;
+}
+
+.c_red {
+    color: #FF0066;
+}
+
+.c_yellow {
+    color: #7f7200;
+}
+
+.c_blue {
+    color: #3366CC;
+}
+
+.c_white {
+    color: #FFFFFF;
+}
+
+.c_gray {
+    color: #808080;
+}
+
+.c_black {
+    color: #201F35;
+}
+
+.c_orange {
+    color: #FF6600;
+}
+
+/*background*/
+.bg_green {
+    background: #b4efab;
+}
+
+.bg_red {
+    background: #feb1b1;
+}
+
+.bg_yellow {
+    background: #f0feb1;
+}
+
+.bg_blue {
+    background: #a3d0ff;
+}
+
+.bg_gray {
+    background: #E9E9E9;
+}
+
+/*border*/
+.border_green {
+    border: 1px solid #8be57e;
+}
+
+.border_red {
+    border: 1px solid #fe9090;
+}
+
+.border_yellow {
+    border: 1px solid #d5d458;
+}
+
+.border_blue {
+    border: 1px solid #6ab3ff;
+}
+
+.border_gray {
+    border: 1px solid #B8B8B8;
+}
+
+/*font*/
+.ft_normal {
+    font: normal 12px Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+
+.ft_bold {
+    font-weight: bold;
+}
+
+.ft_head {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.ft_over {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/*position*/
+.t_center {
+    text-align: center;
+}
+
+.t_left {
+    text-align: left;
+}
+
+.t_right {
+    text-align: right;
+}
+
+.v_middle {
+    vertical-align: middle;
+}
+
+.v_top {
+    vertical-align: top;
+}
+
+.v_bottom {
+    vertical-align: bottom;
+}
+
+.m_top {
+    margin-top: 7px;
+}
+
+.m_top_mini {
+    margin-top: 3px;
+}
+
+.m_top_large {
+    margin-top: 14px;
+}
+
+/*浮动*/
+.f_left {
+    float: left;
+}
+
+.f_right {
+    float: right;
+}
+
+.f_left, .f_right {
+    display: inline;
+}
+/*清除浮动*/
+.f_clear:before,
+.f_clear:after {
+    display: table;
+    content: "";
+}
+
+.f_clear:after {
+    clear: both;
+}
+
+.f_clear {
+    *zoom: 1;
+}
+
+/* 圆角 */
+.radius {
+    -webkit-border-radius: 6px 6px 6px 6px;
+    -moz-border-radius: 6px 6px 6px 6px;
+    border-radius: 6px 6px 6px 6px;
+}
+
+.radius_top {
+    -webkit-border-radius: 6px 6px 0px 0px;
+    -moz-border-radius: 6px 6px 0px 0px;
+    border-radius: 6px 6px 0px 0px;
+}
+
+.radius_left {
+    -webkit-border-radius: 6px 0px 0px 6px;
+    -moz-border-radius: 6px 0px 0px 6px;
+    border-radius: 6px 0px 0px 6px;
+}
+
+.radius_right {
+    -webkit-border-radius: 0px 6px 6px 0px;
+    -moz-border-radius: 0px 6px 6px 0px;
+    border-radius: 0px 6px 6px 0px;
+}
+
+/* 文本阴影 */
+.textshadow {
+    text-shadow: 2px 2px 0px #dddddd;
+}
+
+/* 阴影 */
+.shadow {
+    -webkit-box-shadow: 2px 3px 3px #dddddd;
+    -moz-box-shadow: 2px 3px 3px #dddddd;
+    box-shadow: 2px 3px 3px #dddddd;
+}
+
+/*link*/
+.link {
+    text-decoration: none;
+}
+
+.link_blue {
+    color: #3366CC;
+}
+
+    .link_blue:hover {
+        color: #B52725;
+        text-decoration: underline;
+    }
+
+.link_green {
+    color: #276d17;
+}
+
+    .link_green:hover {
+        color: #B52725;
+        text-decoration: underline;
+    }
+
+.link_red {
+    color: #FF0066;
+}
+
+    .link_red:hover {
+        color: #B52725;
+        text-decoration: underline;
+    }
+
+.link_gray {
+    color: #808080;
+}
+
+    .link_gray:hover {
+        color: #B52725;
+        text-decoration: underline;
+    }
+
+.link_black {
+    color: #201F35;
+}
+
+    .link_black:hover {
+        color: #B52725;
+        text-decoration: underline;
+    }
+
+.link_white {
+    color: #FFFFFF;
+}
+
+    .link_white:hover {
+        color: #B52725;
+        text-decoration: underline;
+    }
+
+/*line*/
+.line {
+    border-style: none;
+    background-color: #dddddd;
+    height: 1px;
+}
+
+.input {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d4d4d4;
+    height: 20px;
+    line-height: 20px;
+    padding-left: 3px;
+    padding-right: 3px;
+    vertical-align: middle;
+    text-align: left;
+    border-radius:0px;
+}
+
+    .input:hover {
+        border: 1px solid #3399FF;
+        box-shadow: 0 0 5px #3399FF;
+    }
+
+.readonly {
+    background-color: #efeeee;
+}
+
+.label {
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    text-align: left;
+}
+/*信息分类标题 Begin*/
+.info_class {
+    border-bottom: 1px solid #0092dc;
+    margin: 15px auto auto;
+    padding: 0;
+    width: 95%;
+    cursor: pointer;
+}
+
+    .info_class .icon {
+        background: none repeat scroll 0 0 #0094ff;
+        border-radius: 50%;
+        float: left;
+        height: 10px;
+        margin-right: 5px;
+        margin-top: 5px;
+        width: 10px;
+    }
+
+    .info_class span {
+        text-shadow: 0px 0px 5px #dddddd;
+        font-size: 25px;
+        font-family: Cambria;
+        color: #0092dc;
+        font-size: 18px;
+    }
+/*信息分类标题 End*/

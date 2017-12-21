@@ -1,0 +1,190 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>数据监控管理系统</title>
+    <link href="~/Resource/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Resource/css/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="~/Resource/css/themes/icon.css" rel="stylesheet" />
+    <link href="~/Resource/css/layout.css" rel="stylesheet" />
+    <link href="~/Resource/css/themes/gray/core.css" rel="stylesheet" />
+    <link href="~/Resource/css/index.css" rel="stylesheet" />
+</head>
+<body class="easyui-layout">
+
+    <div data-options="region:'north',border:false" style="height: 55px; overflow: hidden;">
+        <div class="box" style="height: 55px; background: none repeat scroll 0 0 #0092dc; color: #fff">
+            <div class="f_left m_top">
+                <img src="@Url.Content("~/Resource/img/logo.png")" />
+            </div>
+            <div class="f_left" style="margin-top: 9px; margin-left: 5px;">
+                <p class="top_system_text">数据监控管理系统</p>
+            </div>
+            <div class="f_right" style="margin-top: 10px; margin-right: 5px; height: 20px; line-height: 20px; vertical-align: middle;">
+                <a class="f_right link_blue" style="margin-right:7px;color:#fff" href="@Url.Content("~/Home/Logout/")">
+                    <i class="glyphicon glyphicon-white glyphicon-off"></i>退出
+                </a>
+                @*  <span class="f_right c_gray" style="margin-right: 7px;color:#fff">|</span>
+                    <a class="f_right link_blue" style="margin-right:7px;color:#fff" href="@Url.Content("~/Account/ChangePassword/")">
+                        <i class="glyphicon glyphicon-white glyphicon-lock"></i>修改密码
+                    </a>*@
+                <span class="f_right c_gray" style="margin-right: 7px; color: #fff">|</span>
+                <span class="f_right ft_blod" style="margin-right: 7px; color: #fff">
+                    <i class="glyphicon glyphicon-white glyphicon-user"></i>@Winner.Framework.MVC.ApplicationContext.Current.User.UserName
+                </span>
+
+                <div class="f_clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <div data-options="region:'west',split:true,title:'菜单导航',iconCls:'glyphicon glyphicon-eye-open'" style="width: 200px; padding-bottom: 5px;">
+        <div id="accordion" class="easyui-accordion" data-options="fit:true,border:false">
+            <div title="基础数据" data-options="iconCls:'glyphicon glyphicon-th'" style="padding: 7px; overflow: auto;">
+                <ul id="menu_base" class="easyui-tree" data-options="onClick:OpenTabPage"></ul>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'center'">
+        <div id="tabpanel" style="margin: 0; padding: 0;">
+        </div>
+    </div>
+
+    <div id="tabpanel-tools">
+        <a id="tabpanel-tools-mb2" class="easyui-linkbutton" data-options="plain:'true'" href="javascript:void(0)" onclick="CloseAll2();" title="除此之外全部关闭">
+            <i class="glyphicon glyphicon-folder-close"></i>
+        </a>
+        <a id="tabpanel-tools-mb1" class="easyui-linkbutton" data-options="plain:'true'" href="javascript:void(0)" onclick="CloseAll();" title="全部关闭">
+            <i class="glyphicon glyphicon-remove"></i>
+        </a>
+    </div>
+
+    <script src="~/Resource/scripts/jquery/jquery-1.7.1.min.js"></script>
+    <script src="~/Resource/scripts/jquery/jquery.validate.min.js"></script>
+    <script src="~/Resource/scripts/easyui/jquery.easyui.min.js"></script>
+    <script src="~/Resource/scripts/easyui/easyui-lang-zh_CN.js"></script>
+    <script src="~/Resource/scripts/ext/frameHelper.js"></script>
+    <script src="~/Resource/scripts/ext/pageHelper.js"></script>
+
+    <script type="text/javascript">
+
+        var _WellcomePageUrl = "@Url.Content("~/Home/Wellcome/")";
+        var _WellcomePageTitle = "首  页";
+
+        var _TargetPageUrl = "@ViewBag.TargetPageUrl";
+        var _TargetPageTitle = "@ViewBag.TargetPageTitle";
+
+        $(function () {
+            initMenus();
+            InitTab();
+            InitWelcomePage();
+            InitTargetPage();
+        });
+
+        function initMenus() {
+            $('#menu_base').tree({
+                onClick: OpenTabPage,
+                data: [
+                { text: '栏目管理', url: '/Channel/Index', iconCls: 'glyphicon  glyphicon-home' },
+                { text: '监控计划', url: '/SQL/Index', iconCls: 'glyphicon  glyphicon-home' },
+                { text: '计划服务', url: '/WinService/Index', iconCls: 'glyphicon  glyphicon-home' },
+                { text: '监控管理员', url: '/Admin/Index', iconCls: 'glyphicon  glyphicon-home' }
+                ]
+            });
+        }
+
+        //初始化Tab
+        function InitTab() {
+            $("#tabpanel").tabs({
+                fit: true,
+                border: false,
+                plain: true,
+                tools: "#tabpanel-tools",
+                onBeforeClose: function (title, index) {
+                    var $iframeWrap = $("#" + title + "Wrap");
+                    var $iframe = $("." + title, $iframeWrap);
+
+                    $iframe.attr("src", "about:blank");
+                    //$iframe[0].contentWindow.document.write('');
+                    //$iframe[0].contentWindow.close();
+                    $iframe.remove();
+                    $iframeWrap.remove();
+                }
+            });
+        }
+
+        //初始化欢迎页
+        function InitWelcomePage() {
+            FrameHelper.TabPage.Open({ title: _WellcomePageTitle, url: _WellcomePageUrl, closable: false });
+        }
+
+        //初始化目标页
+        function InitTargetPage() {
+            if (_TargetPageUrl != "") {
+                FrameHelper.TabPage.Open({ title: _TargetPageTitle, url: _TargetPageUrl, closable: true });
+            }
+        }
+
+        //导航－打开Tab页
+        function OpenTabPage(node) {
+            if (node.url != null && node.url != "") {
+                FrameHelper.TabPage.Open({
+                    title: node.text,
+                    url: node.url,
+                    iconCls: node.iconCls
+                });
+            }
+        }
+
+        //Tab工具栏－全部关闭
+        function CloseAll() {
+            var _panels = $("#tabpanel").tabs("tabs");
+
+            var _panelTitles = [];
+
+            $.each(_panels, function (i, n) {
+                var _panel = n.panel("options");
+
+                if (_panel.closable) {
+                    _panelTitles.push(_panel.title);
+                }
+            });
+
+            $.each(_panelTitles, function (i, n) {
+                $("#tabpanel").tabs("close", n);
+            });
+        }
+
+        //Tab工具栏－除此之外全部关闭
+        function CloseAll2() {
+            var _selPanel = $('#tabpanel').tabs('getSelected');
+            var _selTitle = _selPanel.panel("options").title;
+
+            var _panels = $("#tabpanel").tabs("tabs");
+
+            var _panelTitles = [];
+
+            $.each(_panels, function (i, n) {
+                var _panel = n.panel("options");
+
+                if (_panel.closable) {
+                    if (_panel.title != _selTitle) {
+                        _panelTitles.push(_panel.title);
+                    }
+                }
+            });
+
+            $.each(_panelTitles, function (i, n) {
+                $("#tabpanel").tabs("close", n);
+            });
+        }
+
+    </script>
+</body>
+</html>

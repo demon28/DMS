@@ -1,0 +1,75 @@
+﻿
+.row {
+    *zoom: 1;
+}
+
+    .row:before,
+    .row:after {
+        display: table;
+        content: "";
+        clear: both;
+    }
+
+[class*="span"] {
+    float: left;
+    min-height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.text_right {
+    text-align: right;
+}
+
+.text_left span {
+    color: #0092dc;
+}
+
+.span12 {
+    width: 960px;
+}
+
+.span11 {
+    width: 880px;
+}
+
+.span10 {
+    width: 800px;
+}
+
+.span9 {
+    width: 720px;
+}
+
+.span8 {
+    width: 640px;
+}
+
+.span7 {
+    width: 560px;
+}
+
+.span6 {
+    width: 480px;
+}
+
+.span5 {
+    width: 400px;
+}
+
+.span4 {
+    width: 320px;
+}
+
+.span3 {
+    width: 240px;
+}
+
+.span2 {
+    width: 160px;
+}
+
+.span1 {
+    width: 80px;
+}

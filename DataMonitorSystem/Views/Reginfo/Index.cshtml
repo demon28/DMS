@@ -1,0 +1,122 @@
+﻿<div id="cc" class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'center',title:'服务商',split:true,iconCls:'glyphicon glyphicon-th-list'">
+        <div id="grdTools_date">
+            <div>
+                <div class="box">
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            用户账号：
+                        </div>
+                        <div class="span2">
+                            <input id="NodeCode" name="NodeCode" class="input validatebox-text" type="text" style="width: 135px;" />
+                        </div>
+                        <div class="span1 text_right">
+                            用户姓名：
+                        </div>
+                        <div class="span2">
+                            <input id="NodeName" name="NodeName" class="input validatebox-text" type="text" style="width: 135px;" />
+                        </div>
+                        <div class="span1 text_right">
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-search', plain:true" onclick="bindMemberDataGrid();">查询</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="line" />
+            </div>
+        </div>
+        <table id="dg_Store"></table>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        var _Index = "@Url.Content("~/Reginfo/Index")";
+
+        $(function () {
+            initForm();
+            initDataGrid();
+        });
+        //初始化界面
+        function initForm() {
+
+        }
+
+        //初始化数据表
+        function initDataGrid() {
+            //列定义
+            var columns = [[
+                { field: 'selected', checkbox: true },
+                { field: 'NODEID', title: '用户编号', sortable: true },
+                { field: 'NODECODE', title: '用户账户', sortable: true },
+                { field: 'NODENAME', title: '用户名称',  sortable: true },
+                { field: 'INTRODUCER', title: '推荐人id', hidden: false, sortable: true },
+                { field: 'ISCONFIRMED', title: '是否认证', width: 80, sortable: true },
+                { field: 'MOBILENO', title: '手机号', sortable: true },
+                { field: 'NODENAME', title: '操作员', hidden: false, sortable: true },
+                { field: 'CREATETIME', title: '注册时间', width: 150, sortable: true }
+            ]];
+
+            //表格定义
+            $("#dg_Store").datagrid({
+                fit: true,
+                toolbar: '#grdTools_date',
+                pagination: true,
+                rownumbers: true,
+                striped: true,
+                fill: true,
+                selectOnCheck: false,
+                singleSelect: true,
+                idField: "CREATETIME",
+                pageSize: 50,
+                pageList: [ 50, 100, 200],
+                sortName: "CREATETIME",
+                sortOrder: "desc",
+                columns: columns,
+                queryParams: getQueryParams(),
+                url: _Index,
+                rowStyler: function (index, row) {
+                    switch (row.ISCONFIRMED) {
+                        case "未认证": {
+                            return "color:Red;font-style:italic;";
+                        }
+                        default:
+                    }
+                },
+                onClickRow: function (index, data) {
+                    bindReferencesDataGrid(data.ID);
+                    ko.applyBindings(data);
+                }
+            });
+        }
+
+        //得到查询参数
+        function getQueryParams() {
+            var params =
+            {
+                NodeCode: $("#NodeCode").val(),
+                NodeName: $("#NodeName").val(),
+            };
+
+            return params;
+        }
+
+        //绑定数据表
+        function bindMemberDataGrid() {
+
+            if (!$("#dg_Store").datagrid("options").url)
+                $("#dg_Store").datagrid("options").url = _Index;
+            $('#dg_Store').datagrid("load", getQueryParams());
+        }
+
+        //刷新数据表
+        function refreshDataGrd() {
+            $("#dg_Store").datagrid("unselectAll");
+            $("#dg_Store").datagrid("uncheckAll");
+            $("#dg_Store").datagrid("clearChecked");
+            $("#dg_Store").datagrid("clearSelections");
+            $('#dg_Store').datagrid('reload');
+        }
+
+    </script>
+}

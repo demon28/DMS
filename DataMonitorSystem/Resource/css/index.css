@@ -1,0 +1,16 @@
+﻿body {
+}
+
+.top {
+    height: 55px;
+    background: none repeat scroll 0 0 #0092dc;
+    color: #fff;
+}
+
+.top_system_text {
+    font-family: 宋体, Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-left: 50px;
+}

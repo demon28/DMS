@@ -1,0 +1,111 @@
+﻿@model DataMonitorSystem.Models.VInfoModel
+<div class="box">
+    <form id="_form" method="post" class="m_top">
+        <input id="ChannelId" name="ChannelId" type="hidden" value="@Model.ChannelId" />
+        <div class="box">
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    标题：
+                </div>
+                <div class="span2">
+                    <input id="Title" name="Title" type="text" style="width: 192px;" class="input" />
+                </div>
+
+            </div>
+            @*<div class="row m_top">
+                    <div class="span1 text_right">
+                        系统类型：
+                    </div>
+                    <div class="span2">
+                        <select id="ChannelId" name="ChannelId" class="input easyui-combobox" style="width: 200px;"></select>
+                    </div>
+                </div>*@
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    状态：
+                </div>
+                <div class="span2">
+                    <select id="State" name="State" class="input easyui-combobox" data-options="editable: false,panelHeight: 120,valueField: 'Value',textField: 'Text',url:'@Url.Content("~/Enum/SQLStatus/?all=0")'" style=" width: 200px;"></select>
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    备注：
+                </div>
+                <div class="span4">
+                    <textarea id="Remark" name="Remark" cols="20" rows="3" style="width: 200px"></textarea>
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    SQL语句：
+                </div>
+                <div class="span4">
+                    <textarea id="SqlContext" name="SqlContext" cols="20" rows="20" style="width: 800px"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            initForm();
+            validateForm();
+            PageHelper.Dialog.Submit(function () {
+                SubmitForm();
+            });
+        });
+        //初始化数据
+        function initForm() {
+            //bindProvince();
+            $('#State').combobox('select', "1");
+            $('#ChannelId').val(@Model.ChannelId);
+        }
+        //数据验证
+        function validateForm() {
+            $("#Title").validatebox({
+                required: true,
+                validType: ["length[1,20]"],
+            });
+        }
+
+
+        @*//绑定系统类型
+        function bindProvince() {
+            $('#ChannelId').combobox({
+                url: '@Url.Content("~/Channel/FarthChannel/")',
+                panelHeight: 200,
+                editable: true,
+                valueField: 'CHANNEL_ID',
+                textField: 'CHANNEL_NAME'
+            });
+            $('#ChannelId').combobox('setValue', "==请选择==");
+        }*@
+
+
+        //提交表单
+        function SubmitForm() {
+            $("#_form").form("submit", {
+                url: "@Url.Content("~/SQL/Add")",
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    result = eval("(" + result + ")");
+                    if (result.Success) {
+                        PageHelper.Dialog.Callback(result.Content);
+                        PageHelper.Dialog.Close();
+                    }
+                    else {
+                        PageHelper.Message.ShowError("错误", result.Message);
+                    }
+                }
+            });
+        }
+
+
+    </script>
+}

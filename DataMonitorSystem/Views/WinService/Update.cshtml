@@ -1,0 +1,92 @@
+﻿@model DataMonitorSystem.Models.VWinServiceModel
+<div class="box">
+    <form id="_form" method="post" class="m_top">
+        <div class="box">
+            <input id="Id" name="Id" type="hidden" />
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    周期：
+                </div>
+                <div class="span2">
+                    <select id="Cycle" name="Cycle" class="input easyui-combobox" style="width: 200px;"></select>
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    执行时间：
+                </div>
+                <div class="span2">
+                    <input id="NextRunTime" name="NextRunTime" class="input  ui_timepicker" style="width: 200px;">
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    备注：
+                </div>
+                <div class="span2">
+                    <textarea id="Reamrks" name="Reamrks" cols="20" rows="3" style="width: 200px"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    <link href="~/Resource/css/css/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+    <link href="~/Resource/css/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="~/Resource/scripts/jquery/jquery-ui-1.8.17.custom.min.js"></script>
+    <script src="~/Resource/scripts/jquery/jquery-ui-timepicker-addon.js"></script>
+    <script src="~/Resource/scripts/jquery/jquery-ui-timepicker-zh-CN.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            initForm();
+            PageHelper.Dialog.Submit(function () {
+                if ($("#NextRunTime").val() == "") {
+                    PageHelper.Message.ShowError("错误", "执行时间不能为空！");
+                } else {
+                    SubmitForm();
+                }
+            });
+        });
+        function time() {
+            $(".ui_timepicker").datetimepicker({
+                showSecond: true,
+                timeFormat: 'hh:mm:ss',
+                stepHour: 1,
+                stepMinute: 1,
+                stepSecond: 1
+            })
+        }
+        //初始化数据
+        function initForm() {
+            time();
+            apiEnum.bindCycle();
+            $("#Id").val('@Model.Id');
+            $("#Cycle").combobox('setValue', '@Model.Cycle');
+            $("#NextRunTime").val("@Model.NextRunTime");
+            $("#Reamrks").val("@Model.Reamrks");
+        }
+        function SubmitForm() {
+            $("#_form").form("submit", {
+                url: "@Url.Content("~/WinService/Update")",
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    result = eval("(" + result + ")");
+                    PageHelper.Dialog.Callback(result.Content);
+                    if (result.Success) {
+                        PageHelper.Dialog.Close();
+                    }
+                    else {
+                        PageHelper.Message.ShowError("错误", result.Message);
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+
+

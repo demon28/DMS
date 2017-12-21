@@ -1,0 +1,246 @@
+﻿
+<div id="cc" class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'center',title:'服务商',split:true,iconCls:'glyphicon glyphicon-th-list'">
+        <div id="grdTools_date">
+            <div>
+                <div class="box">
+                    <div class="row m_top">
+                        <div class="span1 text_right">
+                            系统名称：
+                        </div>
+                        <div class="span2">
+                            <input id="DisPlayName" name="DisPlayName" class="input validatebox-text" type="text" style="width: 135px;" />
+                        </div>
+                        <div class="span1 text_right">
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-search', plain:true" onclick="bindMemberDataGrid();">查询</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="line" />
+            </div>
+        </div>
+        <table id="dg_Store"></table>
+    </div>
+
+    <div data-options="region:'east',iconCls:'glyphicon glyphicon-random',title:'',split:true" style="width: 550px;">
+        <div id="tt" class="easyui-tabs" data-options="fit:true">
+            <div title="SQL语句表" data-options="iconCls:'glyphicon glyphicon-random'">
+                <div id="grdTools_admin">
+                    @{
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-plus-sign',plain:true" onclick="addAdmin();">新增</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-edit',plain:true" onclick="updateAdmin();">修改</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'glyphicon glyphicon-trash',plain:true" onclick="deleteAdmin();">删除</a>
+                    }
+                </div>
+                <table id="dg_Member"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        var _indexApi = "@Url.Content("~/SQL/Index")";
+        var _addApi = "@Url.Content("~/SQL/Add/")";
+        var _memberApi = "@Url.Content("~/SQL/Member/?Info_id=")";
+        var _updateApi = "@Url.Content("~/SQL/Update/?Id=")";
+        var _deleteApi = "@Url.Content("~/SQL/Delete/?Id=")";
+        var _addAdmin = "@Url.Content("~/Admin/Add/")";
+        var _updateAdmin = "@Url.Content("~/Admin/Update/?Id=")";
+        var _deleteAdmin="@Url.Content("~/Admin/Delete/?Id=")";
+
+        $(function () {
+            initForm();
+            validateForm();
+            initDataGrid();
+            initMemberDataGrid();
+        });
+        //初始化界面
+        function initForm() {
+
+        }
+       
+
+        //初始化数据表
+        function initDataGrid() {
+            //列定义
+            var columns = [[
+                { field: 'selected', checkbox: true },
+                { field: 'APPID', title: '编号', sortable: true },
+                { field: 'DisPlayName', title: '系统名称', sortable: true },
+                { field: 'REMARK', title: '备注', sortable: true },
+                { field: 'CREATETIME', title: '录入时间', width: 150, sortable: true },
+                { field: 'ISDEL', title: '是否被删除', width: 150, sortable: true },
+            ]];
+
+            //表格定义
+            $("#dg_Store").datagrid({
+                fit: true,
+                toolbar: '#grdTools_date',
+                pagination: true,
+                rownumbers: true,
+                striped: true,
+                fill: true,
+                selectOnCheck: false,
+                singleSelect: true,
+                idField: "CREATETIME",
+                pageSize: 20,
+                pageList: [20, 50, 100, 200],
+                sortName: "CREATETIME",
+                sortOrder: "desc",
+                columns: columns,
+                queryParams: getQueryParams(),
+                url: _indexApi,
+                rowStyler: function (index, row) {
+                    switch (row.ISDEL) {
+                        case "删除": {
+                            return "color:Red;font-style:italic;";
+                        }
+                        default:
+                    }
+                },
+                onClickRow: function (index, data) {
+                    bindReferencesDataGrid(data.ID);
+                    ko.applyBindings(data);
+                }
+            });
+        }
+
+        //初始化数据表
+        function initMemberDataGrid() {
+            //列定义
+            var columns = [[
+                //{ field: 'selected', checkbox: true },
+                { field: 'ID', title: '编号', width: 80 },
+                { field: 'TITLE', title: 'SQL标题', width: 100 },
+                { field: 'NODENAME', title: '姓名', width: 80, sortable: true },
+                { field: 'NODECODE', title: '用户账号', width: 80, sortable: true },
+                { field: 'REMARK', title: '备注', width: 80, sortable: true },
+                { field: 'CREATE_TIME', title: '录入时间', width: 150, sortable: true }
+            ]];
+
+            //表格定义
+            $("#dg_Member").datagrid({
+                fit: true,
+                toolbar: '#grdTools_admin',
+                pagination: true,
+                rownumbers: true,
+                striped: true,
+                fill: true,
+                selectOnCheck: false,
+                singleSelect: true,
+                idField: "CREATE_TIME",
+                pageSize: 20,
+                pageList: [20, 50, 100, 200],
+                sortName: "CREATE_TIME",
+                sortOrder: "desc",
+                columns: columns,
+                rowStyler: function (index, row) {
+
+                }
+            });
+        }
+
+        //得到查询参数
+        function getQueryParams() {
+            var params =
+            {
+                NodeTitle: $("#DisPlayName").val()
+            };
+
+            return params;
+        }
+
+        //绑定数据表
+        function bindMemberDataGrid() {
+
+            if (!$("#DisPlayName").validatebox("isValid")) {
+                return false;
+            }
+            if (!$("#dg_Store").datagrid("options").url)
+                $("#dg_Store").datagrid("options").url = _indexApi;
+            $('#dg_Store').datagrid("load", getQueryParams());
+        }
+
+        //绑定数据表
+        function bindReferencesDataGrid(ID) {
+            var url = _memberApi + ID;
+            $("#dg_Member").datagrid("options").url = url;
+            $('#dg_Member').datagrid("load");
+        }
+
+        //刷新数据表
+        function refreshDataGrd() {
+            $("#dg_Store").datagrid("unselectAll");
+            $("#dg_Store").datagrid("uncheckAll");
+            $("#dg_Store").datagrid("clearChecked");
+            $("#dg_Store").datagrid("clearSelections");
+            $('#dg_Store').datagrid('reload');
+        }
+        /////////////////////////////////////// 对悬浮窗实现的增删改////////////////////////////////
+        //刷新数据表
+        function refreshdg_Member() {
+            $("#dg_Member").datagrid("unselectAll");
+            $("#dg_Member").datagrid("uncheckAll");
+            $("#dg_Member").datagrid("clearChecked");
+            $("#dg_Member").datagrid("clearSelections");
+            $('#dg_Member').datagrid('reload');
+        }
+        //新增数据
+        function addAdmin() {
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-plus-sign",
+                url: _addAdmin,
+                title: '新增',
+                width: 500,
+                height: 450,
+                callback: function (data) {
+                    refreshdg_Member();
+                }
+            });
+        }
+
+        //编辑数据
+        function updateAdmin() {
+            var row = $('#dg_Member').datagrid('getSelected');
+            if (!row) {
+                PageHelper.Message.ShowError("错误", "请选择需要修改的行！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _updateAdmin + row.ID,
+                title: '修改数据',
+                width: 500,
+                height: 450,
+                callback: function (data) {
+                    refreshdg_Member();
+                    $('#dg_Pos').datagrid("selectRecord", data);
+                }
+            });
+        }
+
+        //删除数据
+        function deleteAdmin() {
+            var row = $('#dg_Member').datagrid('getSelected');
+            if (!row) {
+                PageHelper.Message.ShowError("错误", "请选择需要删除的行！");
+                return;
+            }
+            PageHelper.Dialog.Open({
+                iconCls: "glyphicon glyphicon-edit",
+                url: _deleteAdmin + row.ID,
+                title: '删除数据',
+                width: 450,
+                height: 350,
+                callback: function (data) {
+                    refreshdg_Member();
+                    $('#dg_Pos').datagrid("selectRecord", data);
+                }
+            });
+        }
+
+    </script>
+}

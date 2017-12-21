@@ -1,0 +1,126 @@
+﻿@model DataMonitorSystem.Models.VAdminModel
+<div class="box">
+    <form id="_form" method="post" class="m_top">
+        <div class="box">
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    SQL语句：
+                </div>
+                <div class="span2">
+                    <select id="InfoId" name="InfoId" class="input easyui-combobox" style="width: 200px;"></select>
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    管理员：
+                </div>
+                <div class="span2">
+                    <select id="NodeId" name="NodeId" class="input easyui-combogrid"  style="width: 200px;"></select>
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    休息时发送：
+                </div>
+                <div class="span2">
+                    <input id="IsSend" name="IsSend" class="input"  style="width: 200px;"></input>
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    发送方式：
+                </div>
+                <div class="span2">
+                    <input type="checkbox" id="SendType" name="Notify_EMail" value="1" checked="checked" />邮件
+                    <input type="checkbox" id="SendType" name="Notify_SMS" value="2" />短信
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    邮箱：
+                </div>
+                <div class="span2">
+                    <input id="Email" name="Email" class="input" style="width: 192px;" />
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    备注：
+                </div>
+                <div class="span2">
+                    <textarea id="Remark" name="Remark" cols="20" rows="3" style="width: 200px"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            initForm();
+            validateForm();
+            PageHelper.Dialog.Submit(function () {
+                SubmitForm();
+            });
+        });
+        //初始化数据
+        function initForm() {
+            bindSQL();
+            loadNodeId();
+            apiEnum.bindIsSend({value:0});
+            $("#InfoId").combobox('setValue', '@Model.InfoId');
+        }
+        function loadNodeId() {
+            $('#NodeId').combogrid({
+                panelWidth: 200,
+                panelHeight: 160,
+                required: true,
+                idField: 'NODEID',
+                mode: 'remote',
+                textField: 'TEXT',
+                url: '/SQL/GetNodeId/',
+                columns: [[
+                    { field: 'TEXT', title: '请选择管理员', width: 200}]]
+            });
+            $(".combo>input").attr("placeholder", "可输入管理员姓名 / 管理员账号 ");
+        }
+        //数据验证
+        function validateForm() {
+            $("#Email").validatebox({
+                required: true,
+            });
+        }
+        
+        //绑定SQL语句
+        function bindSQL() {
+            $('#InfoId').combobox({
+                url: '@Url.Content("~/Admin/SQLTitle/")',
+                panelHeight: 200,
+                editable: false,
+                valueField: 'ID',
+                textField: 'TITLE'
+            });
+        }
+        function SubmitForm() {
+            $("#_form").form("submit", {
+                url: "@Url.Content("~/Admin/Add")",
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    result = eval("(" + result + ")");
+                    PageHelper.Dialog.Callback(result.Content);
+                    if (result.Success) {
+                        PageHelper.Dialog.Close();
+                    }
+                    else {
+                        PageHelper.Message.ShowError("错误", result.Message);
+                    }
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,62 @@
+﻿<div class="box">
+    <form id="_form" method="post" class="m_top">
+        <h3>是否确定删除？</h3>
+        <input id="channelId" name="channelId" type="hidden" />
+    </form>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            initForm();
+            validateForm();
+            PageHelper.Dialog.Submit(function () {
+                SubmitForm();
+            });
+        });
+
+        //初始化
+        function initForm() {
+            $('#channelId').val(@ViewBag.channelId);
+        }
+
+        //得到查询参数
+        function getQueryParams() {
+            var params =
+            {
+                channelId: $("#channelId").val()
+            };
+
+            return params;
+        }
+
+        //数据验证
+        function validateForm() {
+        }
+
+        function SubmitForm() {
+            $("#_form").form("submit", {
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    result = eval("(" + result + ")");
+                    if (result.Success) {
+                        PageHelper.Dialog.Callback(result.Content);
+                        PageHelper.Dialog.Close();
+                    }
+                    else {
+                        PageHelper.Message.ShowError("错误", result.Message);
+                    }
+                }
+            });
+        }
+
+
+    </script>
+}
+
+
+
+

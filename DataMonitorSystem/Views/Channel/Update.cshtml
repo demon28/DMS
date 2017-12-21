@@ -1,0 +1,108 @@
+﻿@model DataMonitorSystem.Models.VchannelModel
+<div class="box">
+    <form id="_form" method="post" class="m_top">
+        <input type="hidden" value="" />
+        <div class="box">
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    栏目编号：
+                </div>
+                <div class="span2">
+                    <input id="ChannelId" name="ChannelId" type="text" style="width: 192px;" class="input" readonly="readonly" />
+                </div>
+
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    栏目名称：
+                </div>
+                <div class="span2">
+                    <input id="ChannelName" name="ChannelName" type="text" style="width: 192px;" class="input" />
+                </div>
+
+            </div>
+            @*<div class="row m_top">
+                <div class="span1 text_right">
+                    上级栏目：
+                </div>
+                <div class="span2">
+                    <select id="FatherId" name="FatherId" class="input easyui-combobox" style="width: 200px;"></select>
+                </div>
+            </div>*@
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    状态：
+                </div>
+                <div class="span2">
+                    <select id="Status" name="Status" class="input easyui-combobox" data-options="editable: false,panelHeight: 120,valueField: 'Value',textField: 'Text',url:'@Url.Content("~/Enum/ChannelStatus/?all=0")'" style=" width: 200px;"></select>
+                </div>
+            </div>
+            <div class="row m_top">
+                <div class="span1 text_right">
+                    备注：
+                </div>
+                <div class="span4">
+                    <textarea id="Remarks" name="Remarks" cols="20" rows="3" style="width: 200px"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            initForm();
+            validateForm();
+            PageHelper.Dialog.Submit(function () {
+                SubmitForm();
+            });
+        });
+        //初始化数据
+        function initForm() {
+            bindProvince();
+            $("#ChannelId").val("@Model.ChannelId");
+            $("#ChannelName").val("@Model.ChannelName");
+            @*$("#FatherId").combobox('setValue', '@Model.FatherId');*@
+            $('#Status').combobox('setValue', '@Model.Status');
+            $('#Remarks').val("@Model.Remarks");
+        }
+        //数据验证
+        function validateForm() {
+            //$("#Title").validatebox({
+            //    required: true,
+            //    validType: ["length[1,20]"],
+            //});
+        }
+        //绑定系统类型
+        function bindProvince() {
+            $('#FatherId').combobox({
+                url: '@Url.Content("~/Channel/FarthChannel/")',
+                panelHeight: 200,
+                editable: true,
+                valueField: 'CHANNEL_ID',
+                textField: 'CHANNEL_NAME'
+            });
+        }
+        function SubmitForm() {
+            $("#_form").form("submit", {
+                url: "@Url.Content("~/Channel/Update")",
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    result = eval("(" + result + ")");
+                    if (result.Success) {
+                        PageHelper.Dialog.Callback(result.Content);
+                        PageHelper.Dialog.Close();
+                    }
+                    else {
+                        PageHelper.Message.ShowError("错误", result.Message);
+                    }
+                }
+            });
+        }
+
+    </script>
+}
